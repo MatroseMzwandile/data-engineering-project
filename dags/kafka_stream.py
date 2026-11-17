@@ -18,9 +18,25 @@ def get_data():
 
 def format_data(response):
     data = {}
+    location = response['location']
+    data['first_name'] = response['name']['first']
+    data['last_name'] = response['name']['last']
+    data['gender'] = response['gender']
+    data['address'] = f"{str(location['street']['number'])} {location['street']['name']}, {location['city']}, {location['state']}, {location['country']}, {str(location['postcode'])}"
+    data['postcode'] = str(location['postcode'])
+    data['email'] = response['email']
+    data['username'] = response['login']['username']
+    data['dob'] = response['dob']['date']
+    data['registered_date'] = response['registered']['date']
+    data['phone'] = response['phone']
+    data['picture'] = response['picture']['medium']
+    return data
 
 def stream_data():
     import json
+    result = get_data()
+    result = format_data(result)
+    print(json.dumps(result, indent=3))
     
 # with DAG('user_automation',
 #         default_args=default_args,
