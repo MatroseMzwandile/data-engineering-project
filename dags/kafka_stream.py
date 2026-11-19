@@ -33,10 +33,15 @@ def format_data(response):
     return data
 
 def stream_data():
-    import json
+    import json, time
+    from kafka import KafkaProducer
+
     result = get_data()
     result = format_data(result)
-    print(json.dumps(result, indent=3))
+
+    producer = KafkaProducer(bootstrap_servers=['localhost:9092'], max_block_ms=50000)
+    producer.send('user_data', json.dumps(result).encode('utf-8'))
+
     
 # with DAG('user_automation',
 #         default_args=default_args,
